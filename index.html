@@ -3,11 +3,40 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap">
 <title>Recursive Topic List</title>
 <style>
 .App {
-  font-family: sans-serif;
-  text-align: center;
+  font-family: "Poppins", sans-serif;
+  max-width: 480px;
+  margin: 40px auto;
+  padding: 0 16px;
+}
+
+ul {
+  list-style: none;
+  padding-left: 20px;
+  margin: 0;
+}
+
+.App > ul {
+  padding-left: 0;
+}
+
+p {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 6px 0;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  user-select: none;
+}
+
+span {
+  color: #555;
+  font-size: 13px;
 }
 </style>
 </head>
