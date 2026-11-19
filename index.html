@@ -4,62 +4,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Recursive Topic List</title>
-<meta name="claude:viewport-fit-sides" content="cover">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;800&family=Open+Sans:wght@400;600&display=swap">
 <style>
-/* Layout: theSeniorDev v2 "engineering paper" — white page, faint blueprint grid, single column */
-:root {
-  --bg: #ffffff; --ink: #171717; --muted: #475569; --faint: #64748b; --line: #e2e8f0;
-  --card: #f8fafc; --cta: #262626; --green-bg: #ecfdf5; --green-line: #6ee7b7; --green-ink: #047857;
-  --font-head: "Poppins", system-ui, sans-serif; --font-body: "Open Sans", system-ui, sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
-  color-scheme: light;
+.App {
+  font-family: sans-serif;
+  text-align: center;
 }
-body { background: var(--bg); color: #0f172a; font-family: var(--font-body); font-size: 15px;
-  padding-block: 40px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); position: relative; }
-body::after { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
-  background-image: linear-gradient(to right, rgb(15 23 42 / 0.05) 1px, transparent 1px), linear-gradient(to bottom, rgb(15 23 42 / 0.05) 1px, transparent 1px);
-  background-size: 36px 36px;
-  -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 30%, black 30%, transparent 75%);
-  mask-image: radial-gradient(ellipse 80% 70% at 50% 30%, black 30%, transparent 75%); }
-main { max-width: 640px; margin: 0 auto; }
-.eyebrow { font-family: var(--font-mono); font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint); margin: 0 0 8px; }
-h1 { font-family: var(--font-head); font-weight: 800; font-size: 34px; color: var(--ink); margin: 0 0 12px; text-wrap: balance; }
-.marker-swipe { -webkit-box-decoration-break: clone; box-decoration-break: clone; border-radius: 0.3em; padding: 0.06em 0.35em;
-  background-repeat: no-repeat; background-size: 100% 76%; background-position: 0 68%;
-  background-image: linear-gradient(100deg, rgb(251 247 25 / 0) 0.8%, rgb(251 247 25 / 0.95) 2.6%, rgb(243 238 0 / 0.78) 6%, rgb(251 247 25 / 0.85) 92%, rgb(253 250 96 / 0.95) 96%, rgb(251 247 25 / 0) 98.6%); }
-.legend { color: var(--muted); font-size: 13px; display: flex; gap: 16px; flex-wrap: wrap; align-items: center; margin-bottom: 24px; }
-.legend span { display: inline-flex; align-items: center; gap: 6px; }
-.dot { width: 10px; height: 10px; border-radius: 50%; }
-.dot.on { background: var(--green-bg); border: 1px solid var(--green-line); }
-.dot.off { background: var(--card); border: 1px dashed #94a3b8; }
-.panel { background: var(--card); border-radius: 12px; box-shadow: 0 0 0 1px var(--line), 0 12px 40px rgba(15,23,42,0.08); padding: 20px; }
-ul { list-style: none; margin: 0; padding-left: 24px; display: grid; gap: 8px; }
-.panel > ul { padding-left: 0; }
-li > ul { margin-top: 8px; border-left: 1.5px dashed #cbd5e1; padding-left: 20px; }
-.bubble { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 999px;
-  font: 600 14px var(--font-head); cursor: pointer; transition: filter .15s; }
-.bubble.active { background: var(--green-bg); border: 1px solid var(--green-line); color: var(--green-ink); }
-.bubble.inactive { background: #fff; border: 1px dashed #94a3b8; color: var(--faint); }
-.bubble:hover { filter: brightness(0.97); }
-.bubble:focus-visible { outline: 2px solid #5b9bff; outline-offset: 2px; }
-.count { background: var(--cta); color: #fff; border-radius: 999px; padding: 0 7px; font-size: 12px; font-variant-numeric: tabular-nums; }
-.chev { font-size: 11px; }
 </style>
-
 </head>
 <body>
-<main>
-  <p class="eyebrow">React mock interview · solution</p>
-  <h1>Recursive <span class="marker-swipe">topic list</span></h1>
-  <div class="legend">
-    <span><i class="dot on"></i>Active</span>
-    <span><i class="dot off"></i>Inactive</span>
-    <span>Number = subtopics. Click a topic to expand it.</span>
-  </div>
-  <div class="panel"><div id="root"></div></div>
-</main>
-
+<div id="root"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
@@ -67,52 +20,83 @@ li > ul { margin-top: 8px; border-left: 1.5px dashed #cbd5e1; padding-left: 20px
 const { useState } = React;
 
 const topics = [
-  { title: "Physics", enabled: true, subtopics: [
-    { title: "Classical Mechanics", enabled: true, subtopics: [
-      { title: "Kinematics", enabled: true, subtopics: [] },
-      { title: "Dynamics", enabled: false, subtopics: [] },
-    ]},
-    { title: "Quantum Physics", enabled: false, subtopics: [
-      { title: "Quantum Field Theory", enabled: true, subtopics: [
-        { title: "Quantum Electrodynamics", enabled: true, subtopics: [] },
-      ]},
-    ]},
-  ]},
-  { title: "Mathematics", enabled: true, subtopics: [
-    { title: "Algebra", enabled: true, subtopics: [] },
-    { title: "Calculus", enabled: true, subtopics: [
-      { title: "Differential Equations", enabled: false, subtopics: [] },
-      { title: "Integrals", enabled: true, subtopics: [] },
-    ]},
-  ]},
-  { title: "Chemistry", enabled: false, subtopics: [
-    { title: "Organic Chemistry", enabled: true, subtopics: [
-      { title: "Hydrocarbons", enabled: true, subtopics: [] },
-    ]},
-    { title: "Inorganic Chemistry", enabled: true, subtopics: [] },
-  ]},
+  {
+    title: "Physics",
+    enabled: true,
+    subtopics: [
+      {
+        title: "Classical Mechanics",
+        enabled: true,
+        subtopics: [
+          { title: "Kinematics", enabled: true, subtopics: [] },
+          { title: "Dynamics", enabled: false, subtopics: [] },
+        ],
+      },
+      {
+        title: "Quantum Physics",
+        enabled: false,
+        subtopics: [
+          {
+            title: "Quantum Field Theory",
+            enabled: true,
+            subtopics: [
+              { title: "Quantum Electrodynamics", enabled: true, subtopics: [] },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    title: "Mathematics",
+    enabled: true,
+    subtopics: [
+      { title: "Algebra", enabled: true, subtopics: [] },
+      {
+        title: "Calculus",
+        enabled: true,
+        subtopics: [
+          { title: "Differential Equations", enabled: false, subtopics: [] },
+          { title: "Integrals", enabled: true, subtopics: [] },
+        ],
+      },
+    ],
+  },
+  {
+    title: "Chemistry",
+    enabled: false,
+    subtopics: [
+      {
+        title: "Organic Chemistry",
+        enabled: true,
+        subtopics: [{ title: "Hydrocarbons", enabled: true, subtopics: [] }],
+      },
+      { title: "Inorganic Chemistry", enabled: true, subtopics: [] },
+    ],
+  },
   { title: "Biology", enabled: true, subtopics: [] },
 ];
 
 function TopicItem({ topic }) {
   const [isExpanded, setIsExpanded] = useState(false);
-  const hasSubtopics = topic.subtopics.length > 0;
+
+  const onClick = () => setIsExpanded(!isExpanded);
 
   return (
     <li>
-      <button
-        type="button"
-        className={`bubble ${topic.enabled ? "active" : "inactive"}`}
-        aria-expanded={hasSubtopics ? isExpanded : undefined}
-        onClick={() => setIsExpanded((prev) => !prev)}
+      <p
+        onClick={onClick}
+        aria-expanded={isExpanded}
+        style={{ backgroundColor: topic.enabled ? "aliceblue" : "pink" }}
       >
-        {hasSubtopics && <span className="chev">{isExpanded ? "▾" : "▸"}</span>}
         {topic.title}
-        {hasSubtopics && <span className="count">{topic.subtopics.length}</span>}
-      </button>
-      {hasSubtopics && isExpanded && (
+        {topic.subtopics.length > 0 && <span> ({topic.subtopics.length})</span>}
+      </p>
+      {isExpanded && topic.subtopics.length > 0 && (
         <ul>
-          {topic.subtopics.map((sub) => <TopicItem key={sub.title} topic={sub} />)}
+          {topic.subtopics.map((subtopic) => (
+            <TopicItem key={subtopic.title} topic={subtopic} />
+          ))}
         </ul>
       )}
     </li>
@@ -120,7 +104,15 @@ function TopicItem({ topic }) {
 }
 
 function App() {
-  return <ul>{topics.map((t) => <TopicItem key={t.title} topic={t} />)}</ul>;
+  return (
+    <div className="App">
+      <ul>
+        {topics.map((topic) => (
+          <TopicItem key={topic.title} topic={topic} />
+        ))}
+      </ul>
+    </div>
+  );
 }
 
 ReactDOM.createRoot(document.getElementById("root")).render(<App />);
