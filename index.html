@@ -49,7 +49,7 @@ span {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
 <script type="text/babel">
 const { useState } = React;
-const { ChevronDown, ChevronRight } = LucideReact;
+const { Ban, ChevronDown, ChevronRight } = LucideReact;
 
 const topics = [
   {
@@ -121,6 +121,7 @@ function TopicItem({ topic }) {
         aria-expanded={isExpanded}
         style={{ backgroundColor: topic.enabled ? "aliceblue" : "pink" }}
       >
+        {!topic.enabled && <Ban size={14} color="#c0392b" aria-label="Disabled" />}
         {topic.subtopics.length > 0 &&
           (isExpanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />)}
         {topic.title}
