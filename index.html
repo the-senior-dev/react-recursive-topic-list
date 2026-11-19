@@ -121,11 +121,13 @@ function TopicItem({ topic }) {
         aria-expanded={isExpanded}
         style={{ backgroundColor: topic.enabled ? "aliceblue" : "pink" }}
       >
-        {!topic.enabled && <Ban size={14} color="#c0392b" aria-label="Disabled" />}
         {topic.subtopics.length > 0 &&
           (isExpanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />)}
         {topic.title}
         {topic.subtopics.length > 0 && <span> ({topic.subtopics.length})</span>}
+        {!topic.enabled && (
+          <Ban size={14} aria-label="Disabled" style={{ marginLeft: "auto" }} />
+        )}
       </p>
       {isExpanded && topic.subtopics.length > 0 && (
         <ul>
